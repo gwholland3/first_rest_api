@@ -44,21 +44,29 @@ def hello_world():
 @app.route('/users', methods=['GET', 'POST'])
 def get_users():
     if request.method == 'GET':
-        search_username = request.args.get('name')  # Accessing the value of parameter 'name'
-        if search_username:
+        if len(request.args) > 0:
             subdict = {'users_list': []}
             for user in users['users_list']:
-                if user['name'] == search_username:
+                if is_match(user):
                     subdict['users_list'].append(user)
             return subdict
         return users
     elif request.method == 'POST':
-        userToAdd = request.get_json()
-        users['users_list'].append(userToAdd)
+        user_to_add = request.get_json()
+        users['users_list'].append(user_to_add)
         resp = jsonify(success=True, status_code=200)
         # Optionally, you can always set a response code.
         # 200 is the default code for a normal response
         return resp
+
+
+def is_match(user):
+    supported_filters = ['name', 'job']
+
+    for filter in request.args.keys():
+        if filter in supported_filters and user[filter] != request.args.get(filter):
+            return False
+    return True
 
 
 @app.route('/users/<id>', methods=['GET', 'DELETE'])
