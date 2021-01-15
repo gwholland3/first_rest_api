@@ -60,7 +60,8 @@ def get_users():
         user_to_add = request.get_json()
         user_to_add['id'] = generate_random_id()
         users['users_list'].append(user_to_add)
-        resp = jsonify(success=True, status_code=201)
+        status = {'success': True, 'status_code': 201}
+        resp = jsonify(status, user_to_add)
         # 201 = content created
         return resp
 
