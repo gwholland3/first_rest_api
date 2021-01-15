@@ -56,9 +56,8 @@ def get_users():
     elif request.method == 'POST':
         user_to_add = request.get_json()
         users['users_list'].append(user_to_add)
-        resp = jsonify(success=True, status_code=200)
-        # Optionally, you can always set a response code.
-        # 200 is the default code for a normal response
+        resp = jsonify(success=True, status_code=201)
+        # 201 = content created
         return resp
 
 
